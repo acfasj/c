@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        /* reset */
+        html, body {
+            height: 100%;
+        }
+        div, button, p {
+            margin: 0;
+            padding: 0;
+        }
+
+        .wrapper {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            background-color: #dce6e4;
+        }
+
+        /* normal */
+        .menu {
+            margin-bottom: 20px;
+            font-weight: bolder;
+            font-size: 32px;
+            /*
+            http://cubic-bezier.com/#.28,.07,.09,1
+            这条贝塞尔曲线会比类似于ease, 但是会更快一些
+            0.3s的duration小于line的0.5s是想让更早文字变化更快一些, 用户会觉得响应更迅速
+            */
+            transition: color .3s cubic-bezier(.28, .07, .09, 1);
+        }
+        .menu .line {
+            transform: scaleX(0);
+            height: 6px;
+            transition-property: transform, background-color;
+            transition-duration: .5s;
+            transition-timing-function: cubic-bezier(.28, .07, .09, 1);
+        }
+        /* active */
+        .menu.active {
+            color: #216786;
+        }
+        .menu.active .line {
+            transform: scaleX(1);
+            background-color: #216786;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="menu" id="menu">
+            <p class="menu-content">天天下雨</p>
+            <div class="line"></div>
+        </div>
+        <button type="button" id="button">切换样式</button>
+    </div>
+    <script>
+        const menu = document.querySelector('#menu');
+        const button = document.querySelector('#button');
+        button.onclick = function (e) {
+            menu.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
