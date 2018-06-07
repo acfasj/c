@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+        body {
+            background-color: #eee;
+        }
+        .card {
+            width: 250px;
+            height: 350px;
+            margin: 175px auto;
+            background-color: pink;
+            position: relative;
+            transform-style: preserve-3d; /* 决定其子元素是否在3d空间内 */
+            transition: transform 0.6s;
+        }
+        .pane {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: #fff;
+            font-size: 30px;
+        }
+        .front {
+            background-image: url('./front.jpg');
+            /* backface-visibility determines whether the back face of an element is visible when turned towards the user. */
+            /* 所以当card转过去的时候, .fornt就隐藏了, 就看见了.back */
+            backface-visibility: hidden;
+        }
+        .back {
+            background-image: url('./back.jpg');
+        }
+        .card:hover {
+            transform: rotateY(180deg);
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="pane back">back</div>
+        <div class="pane front">front</div>
+    </div>
+</body>
+</html>
