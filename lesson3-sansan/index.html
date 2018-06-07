@@ -43,7 +43,9 @@
                 height: 100px;
                 border: 2px solid #000;
                 background: #fbf8f1;
-                border-radius: 100% 10% 50% 0% ;
+                border-radius: 100% 10% 50% 0%;
+                transform-origin: bottom center;
+                transition: transform 1s;
             }
             .ear-wrap .right {
                 left: auto;
@@ -96,6 +98,8 @@
                 position: absolute;
                 left: 50%;
                 margin-left: -23px;
+                /* 视频里眼睛有一点类似卡的感觉, 看了视频帧率有58fps, 并且其他部分的过度很平滑, 所以这里用了steps */
+                transition: transform 1s steps(5);
             }
             .eye-bottom {
                 height: 50px;
@@ -105,6 +109,8 @@
                 margin-top: 48px;
                 border-top: 2px solid #46240b;
                 background: #f6f7f2;
+                /* 感觉视频里.eye-bottom变化较快 */
+                transition: transform 0.8s ease-out;
             }
             .eye-wrap .right {
                 left: auto;
@@ -121,6 +127,7 @@
                 border-radius: 50% 50% 50% 50%;
                 background: #e85a5e;
                 opacity: 0.0;
+                transition: opacity 1s;
             }
             /* 鼻子 */
             .nose {
@@ -152,6 +159,7 @@
                 margin-top: -26px;
                 position: absolute;
                 left: 0;
+                transition: border-radius 1s;
             }
             .mouth-wrap .right {
                 border-bottom: 4px solid #000;
@@ -162,7 +170,38 @@
                 left: auto;
                 right: 0;
             }
+
             /*鼠标hover样式 写在这里*/
+
+            /* hover 耳朵 */
+            .container:hover .ear {
+                transform: rotate(-18deg);
+            }
+            .container:hover .ear.right {
+                transform: rotate(18deg);
+            }
+
+            /* hover 眼睛 */
+            .container:hover .eye-core {
+                /* translateX是想让眼睛有一点点偏 */
+                transform: scale(0.88, 1.1) translateX(3px);
+            }
+            .container:hover .eye-bottom {
+                transform: translateY(-20px);
+            }
+
+            /* hover 腮红*/
+            .container:hover .face-red {
+                opacity: 1;
+            }
+
+            /* hover 嘴巴 */
+            .container:hover .mouth {
+                border-bottom-left-radius: 50%;
+            }
+            .container:hover .mouth.right {
+                border-bottom-right-radius: 50%;
+            }
         </style>
     </head>
     <body>
