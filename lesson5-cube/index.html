@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        html, body {
+            height: 100%;
+        }
+        body {
+            margin: 0;
+            background-color: #000;
+            color: #fff;
+        }
+
+        /* variables */
+        :root {
+            --width-size: 240;
+            --width: calc(var(--width-size) * 1px);
+            --width-negative: calc(var(--width) * -1);
+            --width-half: calc(var(--width) / 2);
+            --width-half-negative: calc(var(--width-half) * -1);
+        }
+
+        /*
+        stage
+        http://acgtofe.com/posts/2013/09/css-3d-transform
+        http://acgtofe.com/posts/2015/12/xyz-3d-in-css
+        搞清各种属性和坐标的含义, 是作用于当前元素还是它的后代, 还是都有
+        */
+        .stage {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            perspective: 400px; /* perspective相当于摄像机到投影平面的距离, 作用于子元素, 在css里, 明白一个属性对自身起作用还是对它的子元素起作用是很重要的事 */
+            perspective-origin: 50% 50%; /* stage里灭点的位置, 默认就是这个值, 写明只是为了学习 */
+
+            /* 
+            因为perspective-origin默认是舞台或者元素的中心(在这里是舞台中心)
+            所以stage舞台大小的改变, 或者是元素本身相对于stage位置的改变, 和perspective-origin的改变, 都会影响虚拟3d空间投影到投影屏面的效果, 也就是我们所看到的透视效果 :)
+            */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* cube */
+        .cube {
+            transform-style: preserve-3d; /* 创建一个三维渲染上下文, 看链接, 试试把它注释 */
+            backface-visibility: visible;
+            transform-origin: var(--width-half) var(--width-half) var(--width-half-negative);
+            position: absolute;
+
+            width: var(--width);
+            height: var(--width);
+        }
+        .cube:hover {
+            animation: rotate 6s linear infinite;
+        }
+        @keyframes rotate{
+            0%{
+                transform: rotate3d(0, 1, 0, 0);
+            }
+            100%{
+                transform: rotate3d(0, 1, 0, -360deg);
+            }
+        }
+
+        /* 立方体的各个面 */
+        .pane {
+            /* 
+            这样开始时候所有div都在同一个位置上, 方便变换, 以第一个pane为基准, 其他pane基于它变换而来
+            */
+            position: absolute;
+            transform-origin: 0 0 0;
+            width: var(--width);
+            height: var(--width);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(19, 68, 113, 0.6);
+            box-sizing: border-box;
+            border: 2px solid #258ef1;
+            font-size: 60px;
+            font-weight: bold;
+        }
+        /*
+        注意元素的所有的变换都是相对于它本身的transform-orgin来说的, 如果又tanslate又rotate, 要注意顺序
+        http://acgtofe.com/posts/2015/12/xyz-3d-in-css 当变换函数依次执行时，后一个变换函数总是基于前一个变换后的新transform坐标系
+        也就是说, 坐标系会跟着元素一起跑
+        */
+        /* 前后 */
+        .pane:nth-child(1) {
+        }
+        .pane:nth-child(2) {
+            transform: translateZ(var(--width-negative));
+        }
+        /* 左右 */
+        .pane:nth-child(3) {
+            transform: rotateY(90deg);
+        }
+        .pane:nth-child(4) {
+            transform: rotateY(90deg) translateZ(var(--width));
+        }
+        /* 上下 */
+        .pane:nth-child(5) {
+            transform: rotateX(90deg) translateY(var(--width-negative));
+        }
+        .pane:nth-child(6) {
+            transform: rotateX(90deg) translateY(var(--width-negative)) translateZ(var(--width-negative));
+        }
+
+    </style>
+</head>
+<body>
+    <div class="stage">
+        <div class="cube">
+            <div class="pane">1</div>
+            <div class="pane">2</div>
+            <div class="pane">3</div>
+            <div class="pane">4</div>
+            <div class="pane">5</div>
+            <div class="pane">6</div>
+        </div>
+    </div>
+</body>
+</html>
