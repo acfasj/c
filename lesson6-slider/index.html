@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        /* reset */
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+        body, ul, li  {
+            margin: 0;
+            padding: 0;
+        }
+        ul {
+            list-style: none;
+        }
+
+        .container {
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .img-list {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+        .img-wrapper {
+            opacity: 0; /* 如果使用transtion, 不要设置display为none, 否则transiton不能进行 */
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+        }
+        .img-wrapper.active, .img-wrapper.last-active {
+            opacity: 1;
+        }
+        .img-wrapper.active {
+            z-index: 100 !important;
+        }
+        .img-wrapper.last-active {
+            z-index: 10;
+        }
+        
+
+        .img-wrapper.active:nth-child(1) {
+            animation: to-right 0.5s ease-out;
+        }
+        @keyframes to-right {
+            0% {
+                transform: translateX(-150px);
+            }
+        }
+
+        .img-wrapper.active:nth-child(2) {
+            animation: to-top 0.5s ease-out;
+        }
+        @keyframes to-top {
+            0% {
+                transform: translateY(350px);
+            }
+        }
+
+        .img-wrapper.active:nth-child(3) {
+            animation: zoom-in 1s ease-in;
+        }
+        @keyframes zoom-in {
+            0% {
+                transform: scale(0);
+            }
+        }
+
+        .img-wrapper.active:nth-child(4) {
+            animation: zoom-out 1s ease-out;
+        }
+        @keyframes zoom-out {
+            0% {
+                transform: scale(2);
+            }
+        }
+
+        .img-wrapper.active:nth-child(5) {
+            animation: rotate-and-zoom 0.7s ease-in-out;
+        }
+        @keyframes rotate-and-zoom {
+            0% {
+                transform: rotate(-360deg) scale(0.1);
+            }
+        }
+
+        .thumbnail-list {
+            position: fixed;
+            left: 50%;
+            bottom: 40px;
+            transform: translateX(-50%);
+            z-index: 100;
+            width: 70%;
+            height: 140px;
+            display: flex;
+            justify-content: space-between;
+            /* border: 1px solid #fff; */
+        }
+        .thumbnail-wrapper {
+            flex: 1;
+            margin: 8px;
+            box-sizing: border-box;
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            box-shadow: 0 1px 6px 2px rgba(0, 0, 0, 0.3);
+            border-radius: 2px;
+            /* border: 1px solid #fff; */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <ul class="img-list">
+            <li class="img-wrapper last-active active"></li>
+            <li class="img-wrapper"></li>
+            <li class="img-wrapper"></li>
+            <li class="img-wrapper"></li>
+            <li class="img-wrapper"></li>
+        </ul>
+        <ul class="thumbnail-list">
+            <li class="thumbnail-wrapper"></li>
+            <li class="thumbnail-wrapper"></li>
+            <li class="thumbnail-wrapper"></li>
+            <li class="thumbnail-wrapper"></li>
+            <li class="thumbnail-wrapper"></li>
+        </ul>
+    </div>
+
+    <script>
+        // 初始化dom
+        const imgList = document.querySelector('.img-list')
+        const thumbnailList = document.querySelector('.thumbnail-list')
+        Array.prototype.forEach.call(imgList.children, (item, index) => {
+            const url = `url('${index + 1}.jpg')`
+            item.style.backgroundImage = url
+
+            const thumbnail = thumbnailList.children[index]
+            thumbnail.style.backgroundImage = url
+            thumbnail.dataset.index = index
+        })
+
+        // click event
+        thumbnailList.addEventListener('click', e => {
+            const imgIndex = parseInt(e.target.dataset.index)
+            const isThumnailWrapper = e.target.nodeName === 'LI' && (imgIndex || imgIndex === 0)
+            if (!isThumnailWrapper) {
+                return
+            }
+
+            const lastActive = imgList.querySelector('.active')
+            Array.prototype.forEach.call(imgList.children, (item, index) => {
+                if (index === imgIndex) {
+                    item.classList.add('active')
+                } else  {
+                    item.classList.remove('active', 'last-active')
+                }
+
+                // 在切换的时候, 上一张也要能看得到, 通过z-index控制
+                if (item === lastActive) {
+                    item.classList.add('last-active')
+                }
+            })
+        }, false)
+    </script>
+</body>
+</html>
