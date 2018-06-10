@@ -4,7 +4,7 @@
     <head>
         <meta http-equiv="content-type" content="text/html;charset=utf-8">
         <title>使用 animate.css 制作流畅交互动效</title>
-        <link rel="stylesheet" href="./animate.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
         <style type="text/css">
             html {
                 font-size: 62.5%;
@@ -85,11 +85,33 @@
                 pointer-events: none;
                 color: #999;
             }
+            .form__label::after {
+                content: '';
+                display: block;
+                position: absolute;
+                left: 0;
+                bottom: 0;
+                width: 100%;
+                height: 2px;
+                background-color: #2196f3;
+                transform: scaleX(0);
+                transform-origin: left center;
+                transition: transform 0.3s ease-out;
+            }
+            .form__input:focus ~ .form__label::after {
+                transform: scaleX(1);
+                transition: none;
+            }
             .form__label__content {
                 position: absolute;
+                transition: none;
             }
-            .form__input:focus ~ .form__label .form__label-content,
-            .form--filled .form__label-content {
+            .form__input:focus ~ .form__label .form__label__content,
+            .form__filled ~ .form__label .form__label__content {
+                font-size: 0.8em;
+                transform: translateY(-10px);
+                transform-origin: left top;
+                transition: transform 0.2s ease-out;
             }
             .btn {
                 width: 100%;
@@ -138,6 +160,38 @@
                 </form>
             </section>
         </section>
+        <script src="https://ss1.bdstatic.com/5eN1bjq8AAUYm2zgoY3K/r/www/cache/static/protocol/https/jquery/jquery-1.10.2.min_65682a2.js"></script>
+        <script>
+        $(function () {
+            const $email = $('#email')
+            const $password = $('#password')
+            const $submit = $('.card form button[name="submit"]')
+
+            // focus => input => change => blur
+            $('.card form')
+                .on('change', 'input', function (e) {
+                    const target = e.target
+                    if (e.target.nodeName !== 'INPUT') {
+                        return
+                    }
+
+                    // value change
+                    if (target.value) {
+                        target.classList.add('form__filled')
+                    } else {
+                        target.classList.remove('form__filled')
+                    }
+                    
+                    // submit button
+                    if ($email.val() && $password.val()) {
+                        $submit.css({
+                            animation: 'pulse 1s ease-in-out 4'
+                        }).one('animationend', function (e) {
+                            this.style.animation = ''
+                        })
+                    }
+                })
+        })
+        </script>
     </body>
-    <script src="https://ss1.bdstatic.com/5eN1bjq8AAUYm2zgoY3K/r/www/cache/static/protocol/https/jquery/jquery-1.10.2.min_65682a2.js"></script>
 </html>
